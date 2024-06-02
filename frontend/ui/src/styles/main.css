@@ -1,0 +1,36 @@
+:root {
+    --color-black: #000;
+    --color-light-grey: #d3d3d3;
+    --color-white: #fff;
+    --color-dark1: #10141A;
+    --color-dark2: #091E3D;
+    --color-blue1: #0765F2;
+    --color-blue2: #3C5E91;
+    --color-grey: #727A87;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src:  url('../../public/fonts/Roboto/Roboto-Regular.ttf') format('woff2');  
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto';
+    background-color: var(--color-dark1);
+    color: var(--color-white);
+}
+
+main {
+    padding: 1em;
+}
+
+.flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}

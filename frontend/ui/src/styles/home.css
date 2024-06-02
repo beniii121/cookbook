@@ -1,0 +1,37 @@
+.recipes-otd .flex {
+    justify-content: space-around;
+}
+
+.banner-container {
+    background-image: url(../../public/banner.jpg);
+    object-fit: cover;
+    background-size: cover;
+    height: 25em;
+    background-position-y: center;
+    position: relative;
+}
+
+.banner-container h1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    color: var(--color-white);
+}
+
+.recipes-otd {
+    margin-bottom: 2em;
+}
+
+.recipes-otd > h2 {
+    text-align: center;
+    margin: 0;
+    padding: 1em;
+}
+
+.categories-container {
+    background-color: var(--color-dark2);
+    text-align: center;
+    height: 20em;
+    padding: 1em;
+}

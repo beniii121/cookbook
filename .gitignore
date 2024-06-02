@@ -1,0 +1,4 @@
+frontend/ui/node_modules/*
+frontend/ui/node_modules
+backend/public/uploads/*
+backend/db/recipes.db

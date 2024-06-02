@@ -1,0 +1,32 @@
+# main docker-compose file used for building the app's containers
+version: "3.9"
+
+services:
+  server:
+      build: backend
+      container_name: backend  
+      ports:
+        - 8080:8080
+      volumes:
+        - ./backend/main.js:/usr/src/webdev/main.js
+        - ./backend/dbconnect.js:/usr/src/webdev/dbconnect.js
+        - ./backend/package.json:/usr/src/webdev/package.json
+        - ./backend/package-lock.json:/usr/src/webdev/package-lock.json
+        - ./backend/db:/usr/src/webdev/db
+        - ./backend/public:/usr/src/webdev/public
+      networks:
+        - cookbook
+  ui:
+      build: frontend
+      container_name: frontend
+      ports:
+          - 80:80
+      volumes:
+          - ./frontend/ui:/var/www/ui
+      tty: true
+      stdin_open: true
+      networks:
+        - cookbook
+networks:
+  cookbook:
+    driver: bridge
