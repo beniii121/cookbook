@@ -36,10 +36,14 @@ const RecipeCard = forwardRef((props, ref) => {
             </div>
             <div className='flex-column'>
                 <h2 className='recipe-title'>{recipeTitle}</h2>
-                <h2>Ingredients</h2>
-                <p>{ingredients}</p>
-                <h2>Description</h2>
-                <p className='truncate'>{description}</p>
+                <div className='ingredients-card'>
+                    <h2>Ingredients</h2>
+                    <p>{ingredients}</p>
+                </div>
+                <div className='description-card'>
+                    <h2>Description</h2>
+                    <p className='truncate'>{description}</p>
+                </div>
             </div>
         </div>
     );

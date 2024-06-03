@@ -8,9 +8,8 @@ const exposedPort = 8080
 const app = express()
 const db = new DB()
 const date = new Date()
+const dateFilePath = './lastROTD.txt'
 var uploadDir = 'uploads/'+date.getFullYear()+'/'+(date.getMonth()+1)+'/'+date.getDate()+'/'
-
-console.log(uploadDir)
 
 /*
 *	Main backend component that acts as an API server
@@ -42,7 +41,31 @@ const storage = multer.diskStorage({
 	}
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage })
+
+// function to get last checked date
+function getLastCheckedDate() {
+	if (fs.existsSync(dateFilePath)) {
+	  const data = fs.readFileSync(dateFilePath, 'utf8')
+	  return new Date(JSON.parse(data).lastCheckedDate)
+	}
+	return new Date(0) // Default to epoch if no date is found
+};
+
+// function to get last checked ids
+function getLastCheckedIds() {
+	if (fs.existsSync(dateFilePath)) {
+	  const data = fs.readFileSync(dateFilePath, 'utf8')
+	  return JSON.parse(data).recipe_ids
+	}
+	return new Array() // Default to epoch if no date is found
+};
+  
+// function to update the last checked data in the rotd file
+function updateLastChecked(ids) {
+	const currentDate = new Date()
+	fs.writeFileSync(dateFilePath, JSON.stringify({ recipe_ids:ids, lastCheckedDate: currentDate.toISOString() }))
+}
 
 // adding the json parser and cors middleware to the application, used for parsing the request body
 app.use(express.json())
@@ -68,18 +91,40 @@ app.get('/api/recipe/get/:recipeId', upload.none(), async (req, res) => {
 	const recipeID = req.params['recipeId']
 	const recipe = await db.getFirst("SELECT * FROM recipes WHERE id="+recipeID)
 	
-	console.log(recipe)
-
 	res.json(recipe)
+})
+
+// getting the daily 3 recipes
+app.get('/api/recipe/rotd', upload.none(), async (req, res) => {
+	const today = new Date().getDate()
+	const storedDay = getLastCheckedDate()
+
+	var ids = getLastCheckedIds()
+	var recipes = []
+
+	if (today == storedDay.getDate() && ids != []) {
+		recipes = await db.getAll("SELECT * FROM recipes WHERE id IN ("+(ids.join(','))+") ORDER BY RANDOM() LIMIT 3;")
+		
+		updateLastChecked(ids)
+	} else if (today != storedDay.getDate() && ids != []) {
+		recipes = await db.getAll("SELECT * FROM recipes WHERE id NOT IN ("+(ids.join(','))+") ORDER BY RANDOM() LIMIT 3;")
+		ids = recipes.map(recipe => recipe.id)
+
+		updateLastChecked(ids)
+	} else {
+		recipes = await db.getAll("SELECT * FROM recipes ORDER BY RANDOM() LIMIT 3;")
+		ids = recipes.map(recipe => recipe.id)
+
+		updateLastChecked(ids)
+	}
+
+	res.json(recipes)
 })
 
 // creating a new recipe
 app.post('/api/recipe/create', upload.none(), async (req, res) => {
 	const details = req.body
 	const ingredients_string = details['ingredients_array'].map(i => i.text).join(",")
-
-	console.log(details)
-
 	const result = await db.insertRecipe(details['title'], ingredients_string, details['description'], details['notes'], details['image_path'], 0)
 
 	res.json(result)
@@ -90,8 +135,6 @@ app.post('/api/recipe/edit', upload.none(), async (req, res) => {
 	const details = req.body
 	const ingredients_string = details['ingredients_array'].map(i => i.text).join(",")
 	const recipeID = details['id']
-
-	console.log(details)
 
 	const result = await db.editRecipe(details['title'], ingredients_string, details['description'], details['notes'], details['image_path'], details['liked'], recipeID)
 
@@ -119,8 +162,6 @@ app.post('/api/files/delete', upload.none(), async (req, res) => {
 	if (!filePath) {
 		return res.json({"message":"ok"})
 	}
-
-	console.log(filePath);
 
 	fs.unlink('./public/'+filePath, function(err) {
 		if(err && err.code == 'ENOENT') {

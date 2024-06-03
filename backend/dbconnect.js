@@ -19,7 +19,7 @@ class DB {
     }
 
     async createTable() {
-        let query = "CREATE TABLE IF NOT EXISTS recipes (id integer PRIMARY KEY AUTOINCREMENT,title text,	ingredients text,description text,notes text,image_path text,liked integer default 0,created date);";
+        let query = "CREATE TABLE IF NOT EXISTS recipes (id integer PRIMARY KEY AUTOINCREMENT,title text,ingredients text,description text,notes text,image_path text,liked integer default 0,created date);";
 
         return new Promise((resolve, reject) => {
             this.db.run(query, [], function(err) {

@@ -24,8 +24,6 @@ function CreateRecipe() {
     function submitNewRecipeForm(data) {
         const jsonData = {...data, image_path: filePath, ingredients_array:ingredients};
 
-        console.log(JSON.stringify(jsonData));
-
         fetch("http://localhost:8080/api/recipe/create", {
             method: "POST",
             headers: {
@@ -44,33 +42,23 @@ function CreateRecipe() {
     function addNewIngredient(event) {
         event.preventDefault();
 
-        console.log("adding new ingredient");
-
         const lastIngredient = ingredients[ingredients.length - 1];
         var lastId = 0;
-
-        console.log(lastIngredient);
 
         if (lastIngredient && "id" in lastIngredient) {
             lastId = lastIngredient.id;
         }
 
-        console.log("Last id: "+lastId);
-
         setIngredients([...ingredients, {id:lastId+1}]);
     }
 
     // handling removing ingredient from the ingredients list
-    function removeIngredient(event, ingredientId) {
-        console.log("removing item with id "+ingredientId);
-        
+    function removeIngredient(event, ingredientId) {        
         setIngredients(prevIngredients => prevIngredients.filter(item => item.id !== ingredientId));
     }
 
     // handling setting an ingredient's value
     function setIngredientValue(event, ingredientId) {
-        console.log(event.target.value);
-
         setIngredients(prevIngredients => {
             const index = ingredients.findIndex(i => i.id === ingredientId);
             const updatedIngredients = [...prevIngredients];
@@ -95,7 +83,6 @@ function CreateRecipe() {
         .then(response => response.json())
         .then(data => {
             if (data.path) {
-                console.log(data.path);
                 setFilePath(data.path);
             }
         });

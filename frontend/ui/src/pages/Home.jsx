@@ -15,16 +15,10 @@ function Home() {
 
   const [recipesOTD, setRecipesOTD] = useState([]);
 
-  const data = {"query":"SELECT * FROM recipes LIMIT 3"};
-
   // getting the recipes of the day, whenever the page is first rendered
   useEffect(() => {
-    fetch("http://localhost:8080/api/recipe/get", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+    fetch("http://localhost:8080/api/recipe/rotd", {
+      method: "GET"
     }).then(response => response.json()).then(data => {
       setRecipesOTD(data);
     });
@@ -37,7 +31,7 @@ function Home() {
       </div>
       <div className='recipes-otd'>
         <h2>Featured recipes</h2>
-        <div className='flex'>
+        <div className='recipes flex'>
           {
             (recipesOTD.length != 0) ? recipesOTD.map(recipe => {
               return(<RecipeCardSmall key={recipe.id} featured="true" recipeId={recipe.id} imageUrl={'http://localhost:8080/'+recipe.image_path} recipeTitle={recipe.title} ingredients={recipe.ingredients} />)

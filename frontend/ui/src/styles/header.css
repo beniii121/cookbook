@@ -41,10 +41,30 @@
 input[name="search"] {
     border: none;
     margin: auto 0;
-    width: 55em !important;
+    width: 55em;
 }
 
 input[name="search"]:focus {
     outline: none;
     border: none;
+}
+
+form {
+    width: 100%;
+}
+
+@media only screen and (max-width: 480px) {
+    .header {
+        height: 5em;
+    }
+
+    input[name="search"] {
+        width: 100% !important;
+    }
+}
+
+@media only screen and (max-width: 1080px) {
+    .header {
+        height: 5em;
+    }
 }

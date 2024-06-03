@@ -34,8 +34,6 @@ function EditRecipe() {
     function submitEditRecipeForm(data) {
         const jsonData = {id:recipe.id, title:title, description:desc, notes:notes, image_path: filePath, liked:0, ingredients_array:ingredients};
 
-        console.log(JSON.stringify(jsonData));
-
         fetch("http://localhost:8080/api/recipe/edit", {
             method: "POST",
             headers: {
@@ -54,33 +52,23 @@ function EditRecipe() {
     function addNewIngredient(event) {
         event.preventDefault();
 
-        console.log("adding new ingredient");
-
         const lastIngredient = ingredients[ingredients.length - 1];
         var lastId = 0;
-
-        console.log(lastIngredient);
 
         if (lastIngredient && "id" in lastIngredient) {
             lastId = lastIngredient.id;
         }
 
-        console.log("Last id: "+lastId);
-
         setIngredients([...ingredients, {id:lastId+1}]);
     }
 
     // handling removing ingredient from the ingredients list
-    function removeIngredient(event, ingredientId) {
-        console.log("removing item with id "+ingredientId);
-        
+    function removeIngredient(event, ingredientId) {        
         setIngredients(prevIngredients => prevIngredients.filter(item => item.id !== ingredientId));
     }
 
     // handling setting an ingredient's value
     function setIngredientValue(event, ingredientId) {
-        console.log(event.target.value);
-
         setIngredients(prevIngredients => {
             const index = ingredients.findIndex(i => i.id === ingredientId);
             const updatedIngredients = [...prevIngredients];
@@ -132,7 +120,6 @@ function EditRecipe() {
         .then(response => response.json())
         .then(data => {
             if (data.path) {
-                console.log(data.path);
                 setFilePath(data.path);
             }
         });
@@ -146,8 +133,6 @@ function EditRecipe() {
         .then(data => {
             if (data.id) {
                 setRecipe(data);
-
-                console.log(data);
 
                 const ingredients_array = data.ingredients.split(',');
                 const ingredients_tmp = ingredients_array.map(ingredient => {

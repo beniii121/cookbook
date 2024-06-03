@@ -66,3 +66,28 @@
     width: unset;
 }
 
+@media only screen and (max-width: 480px) {
+    .truncate {
+        width: 100%;
+    }
+
+    .recipe-card .image-container img {
+        height: 200px;
+    }
+
+    .recipe-card .image-container {
+        margin-right: 0;
+    }
+
+    .recipe-card.flex {
+        flex-direction: column;
+    }
+
+    .flex-column {
+        align-self: center;
+    }
+
+    .description-card, .ingredients-card {
+        display: none;
+    }
+}
