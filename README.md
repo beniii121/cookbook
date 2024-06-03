@@ -12,7 +12,7 @@ Docker compose
 
 # How to install and use
 
-Just clone the repo and in the root of the repo, use this command:
+Just clone the repo and in the code folder of the repo, use this command:
 
 docker compose up -d
 
