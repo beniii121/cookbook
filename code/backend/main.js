@@ -102,11 +102,11 @@ app.get('/api/recipe/rotd', upload.none(), async (req, res) => {
 	var ids = getLastCheckedIds()
 	var recipes = []
 
-	if (today == storedDay.getDate() && ids.length != 0) {
+	if (today == storedDay.getDate() && ids.length == 3) {
 		recipes = await db.getAll("SELECT * FROM recipes WHERE id IN ("+(ids.join(','))+") ORDER BY RANDOM() LIMIT 3;")
 		
 		updateLastChecked(ids)
-	} else if (today != storedDay.getDate() && ids.length != 0) {
+	} else if (today != storedDay.getDate() && ids.length == 3) {
 		recipes = await db.getAll("SELECT * FROM recipes WHERE id NOT IN ("+(ids.join(','))+") ORDER BY RANDOM() LIMIT 3;")
 		ids = recipes.map(recipe => recipe.id)
 
