@@ -14,7 +14,9 @@ Docker compose
 
 Just clone the repo and in the code folder of the repo, use this command:
 
+```
 docker compose up -d
+```
 
 This launches the app and after a short time, you can visit the home page at localhost:80. Make sure no other process is running on port 80 or 8080, otherwise the app won't build.
 
